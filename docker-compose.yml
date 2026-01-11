@@ -1,0 +1,12 @@
+services:
+    ansible:
+        build: .
+        container_name: ansible
+        image: ansible:v1.0
+        volumes:
+            - ./ANSIBLE:/etc/ansible
+            - ./keys:/root/.ssh
+        working_dir: /etc/ansible
+        entrypoint: ["/bin/sh", "-c", "while true; do sleep 1; done"]
+        command: ["tail", "-f", "/dev/null"]
+        network_mode: host
