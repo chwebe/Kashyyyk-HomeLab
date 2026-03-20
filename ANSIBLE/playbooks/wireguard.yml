@@ -1,0 +1,28 @@
+---
+- name: Deploy WireGuard VPN with Pi-hole DNS
+  hosts: wireguard
+  become: true
+  gather_facts: true
+  
+  pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Docker and dependencies
+      apt:
+        name:
+          - docker.io
+          - python3-docker
+        state: present
+        update_cache: yes
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+  roles:
+    - pihole

@@ -1,0 +1,7 @@
+---
+# Raspi Docker role - Handlers
+
+- name: restart docker
+  systemd:
+    name: docker
+    state: restarted

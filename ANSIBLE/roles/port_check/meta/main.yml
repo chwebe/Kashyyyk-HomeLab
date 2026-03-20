@@ -1,0 +1,19 @@
+---
+# Port Check role - Metadata
+galaxy_info:
+  author: Ansible user
+  description: Check if network ports are in use before deployment
+  company: none
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - networking
+    - ports
+    - diagnostic
+    - utility
+
+dependencies: []

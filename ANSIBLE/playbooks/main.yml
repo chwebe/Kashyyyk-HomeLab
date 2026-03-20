@@ -1,0 +1,12 @@
+- name: Prepare Systems
+  hosts: oci
+  become: true
+  roles:
+    - system_update
+
+
+- name: prepare raspi Systems
+  hosts: raspi
+  become: true
+  roles:
+    - system_update

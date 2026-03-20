@@ -1,0 +1,41 @@
+services:
+  pihole:
+    image: {{ pihole_image }}
+    container_name: {{ pihole_container_name }}
+    networks:
+      {{ dns_network_name }}:
+        ipv4_address: {{ pihole_ipv4_address }}
+    ports:
+      - {{ pihole_dns_port }}:53/tcp
+      - {{ pihole_dns_port }}:53/udp
+      - {{ pihole_web_port }}:80
+    environment:
+      TZ: "{{ pihole_timezone }}"
+      WEBPASSWORD: "{{ pihole_webpassword }}"
+      DNS1: "{{ pihole_dns1 }}"
+      DNS2: "{{ pihole_dns2 }}"
+      WEB_PORT: "{{ pihole_web_port }}"
+      PIHOLE_DNS_: "{{ pihole_dns_upstream }}"
+    depends_on:
+      - unbound
+    restart: {{ pihole_restart_policy }}
+    
+  unbound:
+    image: {{ unbound_image }}
+    container_name: {{ unbound_container_name }}
+    networks:
+      {{ dns_network_name }}:
+        ipv4_address: {{ unbound_ipv4_address }}
+    ports:
+      - {{ unbound_dns_port }}:53/tcp
+      - {{ unbound_dns_port }}:53/udp
+    volumes:
+      - ./unbound/:/etc/unbound/custom.conf.d
+    restart: {{ unbound_restart_policy }}
+
+networks:
+  {{ dns_network_name }}:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: {{ dns_network_subnet }}

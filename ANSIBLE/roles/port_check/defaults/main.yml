@@ -1,0 +1,12 @@
+---
+# Port Check role - Default variables
+
+# List of ports to check (can be overridden by calling role)
+ports_to_check:
+  - 53
+  - 80
+  - 443
+  - 8080
+
+# Display detailed output
+port_check_verbose: true

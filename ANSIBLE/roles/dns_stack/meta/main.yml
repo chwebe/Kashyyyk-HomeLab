@@ -1,0 +1,25 @@
+---
+# DNS Stack role - Metadata
+galaxy_info:
+  author: Ansible user
+  description: Deploy Pi-hole and Unbound DNS stack with Docker Compose
+  company: none
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+  galaxy_tags:
+    - pihole
+    - unbound
+    - dns
+    - docker
+    - privacy
+
+dependencies:
+  - role: port_check
+    vars:
+      ports_to_check: "{{ dns_stack_ports_to_check }}"
+    tags: ['never', 'check_ports']

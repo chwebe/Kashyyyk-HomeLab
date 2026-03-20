@@ -1,0 +1,19 @@
+---
+# Raspi Docker role - Metadata
+galaxy_info:
+  author: Ansible user
+  description: Install Docker and Docker Compose
+  company: none
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+  galaxy_tags:
+    - docker
+    - docker-compose
+    - container
+
+dependencies: []

@@ -1,0 +1,16 @@
+---
+# Raspi Docker role - Default variables
+
+# Docker package to install
+docker_package: docker.io
+docker_compose_package: docker-compose
+
+# Enable Docker service
+docker_enable_service: true
+
+# Docker Compose
+docker_install_compose: true
+
+# Add user to docker group
+docker_add_user_to_group: true
+docker_user: "{{ ansible_user | default('pi') }}"

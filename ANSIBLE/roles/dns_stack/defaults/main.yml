@@ -1,0 +1,30 @@
+---
+# DNS Stack role - Default variables for Pi-hole + Unbound
+
+# Deployment directory
+dns_stack_deploy_dir: /opt/dns-stack
+
+# Network configuration
+dns_network_name: dns_vnet
+dns_network_subnet: 172.20.0.0/16
+
+# Pi-hole configuration
+pihole_ipv4_address: 172.20.0.8
+pihole_dns_port: 53
+pihole_web_port: 8080
+pihole_timezone: "Europe/Paris"
+pihole_webpassword: "changeme"
+pihole_change_password: false
+pihole_dns1: "172.20.0.9"
+pihole_dns2: "1.1.1.1"
+pihole_dns_upstream: "172.20.0.9#53"
+pihole_container_name: pihole
+pihole_image: pihole/pihole:latest
+pihole_restart_policy: unless-stopped
+
+# Unbound configuration
+unbound_ipv4_address: 172.20.0.9
+unbound_dns_port: 5300
+unbound_container_name: unbound
+unbound_image: klutchell/unbound:latest
+unbound_restart_policy: unless-stopped

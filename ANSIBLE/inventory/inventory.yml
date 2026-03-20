@@ -1,6 +1,22 @@
-all:
+raspi:
+  hosts:
+    coruscant01:
+      ansible_host: 192.168.1.47
+    coruscant02:
+      ansible_host: 192.168.1.13
+
+oci:
+  hosts:
+    wireguard:
+      ansible_host: 84.235.161.154
+      ansible_user: ubuntu
+
+prod:
   children:
-    container:
-      hosts:
-        coruscant02:
-          ansible_host: 192.168.1.13
+    raspi:
+
+local:
+  hosts:
+    myhost:
+      ansible_host: 127.0.0.1
+      ansible_connection: ssh

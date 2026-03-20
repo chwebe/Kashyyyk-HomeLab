@@ -1,0 +1,9 @@
+- name: prepare corrusant Systems
+  hosts: coruscant01
+  become: true
+  roles:
+    - system_update
+    - docker
+    - dns_stack
+  vars:
+    pihole_change_password: true

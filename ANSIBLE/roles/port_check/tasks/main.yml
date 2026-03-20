@@ -1,0 +1,43 @@
+---
+# Port Check role - Check if ports are in use
+
+- name: Check port usage
+  shell: "ss -tulpn | grep ':{{ item }} ' || echo 'FREE'"
+  register: port_check_results
+  changed_when: false
+  failed_when: false
+  loop: "{{ ports_to_check }}"
+
+- name: Build port usage report
+  set_fact:
+    port_check_report: "{{ port_check_report | default([]) + [port_info] }}"
+  loop: "{{ port_check_results.results }}"
+  vars:
+    port_status: "{{ 'FREE' if item.stdout == 'FREE' else 'IN USE' }}"
+    process_info: "{{ item.stdout_lines | select('search', 'users:') | map('regex_replace', '.*users:\\(\\(\"([^\"]+)\".*', '\\1') | list | first | default('unknown') if item.stdout != 'FREE' else '' }}"
+    port_info:
+      port: "{{ item.item }}"
+      status: "{{ port_status }}"
+      process: "{{ process_info }}"
+      details: "{{ item.stdout if item.stdout != 'FREE' else '' }}"
+
+- name: Display port usage report header
+  debug:
+    msg: "{{ item }}"
+  loop:
+    - ""
+    - "╔════════════════════════════════════════════════════════════════╗"
+    - "║              PORT USAGE REPORT                                 ║"
+    - "╠════════════════════════════════════════════════════════════════╣"
+  when: port_check_verbose
+
+- name: Display port status
+  debug:
+    msg: "║ Port {{ '%5s' | format(item.port) }} │ {{ '%-8s' | format(item.status) }} │ {{ '%-35s' | format(item.process) }} ║"
+  loop: "{{ port_check_report }}"
+  when: port_check_verbose
+
+- name: Display port usage report footer
+  debug:
+    msg: "╚════════════════════════════════════════════════════════════════╝"
+  when: port_check_verbose

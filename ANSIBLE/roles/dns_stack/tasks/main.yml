@@ -1,0 +1,74 @@
+---
+# DNS Stack role - Main tasks for Pi-hole + Unbound deployment
+
+- name: Create DNS stack deployment directory
+  file:
+    path: "{{ dns_stack_deploy_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Create Unbound configuration directory
+  file:
+    path: "{{ dns_stack_deploy_dir }}/unbound"
+    state: directory
+    mode: '0755'
+
+- name: Deploy Unbound configuration
+  copy:
+    src: unbound.conf
+    dest: "{{ dns_stack_deploy_dir }}/unbound/unbound.conf"
+    mode: '0644'
+  notify: restart dns stack
+
+- name: Deploy docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ dns_stack_deploy_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: restart dns stack
+
+- name: Start DNS stack (Pi-hole + Unbound)
+  community.docker.docker_compose_v2:
+    project_src: "{{ dns_stack_deploy_dir }}"
+    state: present
+  register: dns_stack_result
+
+- name: Wait for Pi-hole web interface to be ready
+  uri:
+    url: "http://localhost:{{ pihole_web_port }}/admin/"
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 30
+  delay: 2
+  ignore_errors: true
+
+- name: Generate random Pi-hole password
+  set_fact:
+    pihole_random_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters,digits') }}"
+  when: pihole_change_password
+
+- name: Change Pi-hole password
+  community.docker.docker_container_exec:
+    container: "{{ pihole_container_name }}"
+    command: pihole setpassword "{{ pihole_random_password }}"
+  register: password_change_result
+  when: pihole_change_password
+
+- name: Display new Pi-hole password
+  debug:
+    msg:
+      - "Pi-hole password has been changed!"
+      - "New password: {{ pihole_random_password }}"
+      - "IMPORTANT: Save this password securely!"
+  when: pihole_change_password
+
+- name: Display DNS stack access information
+  debug:
+    msg:
+      - "DNS stack is running"
+      - "Pi-hole web interface: http://{{ ansible_default_ipv4.address }}:{{ pihole_web_port }}/admin"
+      - "Pi-hole DNS: {{ ansible_default_ipv4.address }}:{{ pihole_dns_port }}"
+      - "Unbound DNS: {{ ansible_default_ipv4.address }}:{{ unbound_dns_port }}"
+      - "Password: {{ pihole_webpassword }}"
+      - "IMPORTANT: Change the default password!"

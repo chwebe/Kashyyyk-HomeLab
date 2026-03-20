@@ -1,0 +1,50 @@
+---
+# Raspi Docker role - Main tasks for Docker and Docker Compose installation
+
+- name: Update apt cache
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install Docker package
+  apt:
+    name: "{{ docker_package }}"
+    state: present
+
+- name: Start and enable Docker service
+  systemd:
+    name: docker
+    state: started
+    enabled: "{{ docker_enable_service }}"
+
+- name: Add user to docker group
+  user:
+    name: "{{ docker_user }}"
+    groups: docker
+    append: true
+  when: docker_add_user_to_group
+
+- name: Verify Docker installation
+  command: docker --version
+  register: docker_version
+  changed_when: false
+
+- name: Display Docker version
+  debug:
+    msg: "Docker version: {{ docker_version.stdout }}"
+
+- block:
+  - name: Install docker compose
+    apt:
+      name: "{{ docker_compose_package }}"
+      state: present
+  
+  - name: Verify Docker Compose installation
+    command: docker compose version
+    register: compose_version
+    changed_when: false
+
+  - name: Display Docker Compose version
+    debug:
+      msg: "Docker Compose version: {{ compose_version.stdout }}"
+  when: docker_install_compose
