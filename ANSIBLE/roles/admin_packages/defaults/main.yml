@@ -1,0 +1,39 @@
+---
+install_essential_packages: true
+install_development_packages: true
+install_monitoring_packages: true
+install_network_packages: false
+install_archive_packages: false
+install_sync_packages: false
+
+essential_packages:
+  - vim
+  - zsh
+  - tmux
+  - git
+
+development_packages:
+  - curl
+  - wget
+  - tree
+
+monitoring_packages:
+  - htop
+  - ncdu
+  - lsof
+  - strace
+
+network_packages:
+  - net-tools
+  - nmap
+  - tcpdump
+
+archive_packages:
+  - unzip
+  - zip
+  - tar
+  - gzip
+
+sync_packages:
+  - rsync
+  - rclone

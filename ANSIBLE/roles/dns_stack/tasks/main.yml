@@ -14,8 +14,8 @@
     mode: '0755'
 
 - name: Deploy Unbound configuration
-  copy:
-    src: unbound.conf
+  template:
+    src: unbound.conf.j2
     dest: "{{ dns_stack_deploy_dir }}/unbound/unbound.conf"
     mode: '0644'
   notify: restart dns stack

@@ -1,0 +1,5 @@
+- name: prepare corusant Systems
+  hosts: localhost
+  become: true
+  roles:
+    - admin_packages

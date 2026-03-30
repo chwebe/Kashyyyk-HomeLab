@@ -9,3 +9,13 @@
     upgrade: dist
   when: ansible_os_family == 'Debian'
 
+- name: Run "yum update"
+  ansible.builtin.yum:
+    update_cache: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Run "yum upgrade"
+  ansible.builtin.yum:
+    name: '*'
+    state: latest
+  when: ansible_os_family == 'RedHat'
