@@ -5,26 +5,26 @@
 dns_stack_deploy_dir: /opt/dns-stack
 
 # Network configuration
-dns_network_name: dns_vnet
-dns_network_subnet: 172.20.0.0/16
+dns_stack_network_name: dns_vnet
+dns_stack_network_subnet: 172.20.0.0/16
 
 # Pi-hole configuration
-pihole_ipv4_address: 172.20.0.8
-pihole_dns_port: 53
-pihole_web_port: 8080
-pihole_timezone: "Europe/Paris"
-pihole_webpassword: "changeme"
-pihole_change_password: false
-pihole_dns1: "172.20.0.9"
-pihole_dns2: "1.1.1.1"
-pihole_dns_upstream: "172.20.0.9#53"
-pihole_container_name: pihole
-pihole_image: pihole/pihole:latest
-pihole_restart_policy: unless-stopped
+dns_stack_pihole_ipv4_address: 172.20.0.8
+dns_stack_pihole_dns_port: 53
+dns_stack_pihole_web_port: 8080
+dns_stack_pihole_timezone: "Europe/Paris"
+dns_stack_pihole_webpassword: "changeme"
+dns_stack_pihole_change_password: false
+dns_stack_pihole_dns1: "172.20.0.9"
+dns_stack_pihole_dns2: "1.1.1.1"
+dns_stack_pihole_dns_upstream: "172.20.0.9#53"
+dns_stack_pihole_container_name: pihole
+dns_stack_pihole_image: pihole/pihole:latest
+dns_stack_pihole_restart_policy: unless-stopped
 
 # Unbound configuration
-unbound_ipv4_address: 172.20.0.9
-unbound_dns_port: 5300
-unbound_container_name: unbound
-unbound_image: klutchell/unbound:latest
-unbound_restart_policy: unless-stopped
+dns_stack_unbound_ipv4_address: 172.20.0.9
+dns_stack_unbound_dns_port: 5300
+dns_stack_unbound_container_name: unbound
+dns_stack_unbound_image: klutchell/unbound:latest
+dns_stack_unbound_restart_policy: unless-stopped

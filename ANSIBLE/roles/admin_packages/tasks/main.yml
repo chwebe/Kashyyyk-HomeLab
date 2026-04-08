@@ -1,34 +1,34 @@
 ---
 - name: Update system packages
-  include_role:
+  ansible.builtin.include_role:
     name: system_update
 
 - name: Install package families (Debian/Ubuntu)
-  apt:
+  ansible.builtin.apt:
     name: "{{ item.packages }}"
     state: present
   loop:
-    - { packages: "{{ essential_packages }}", enabled: "{{ install_essential_packages }}" }
-    - { packages: "{{ development_packages }}", enabled: "{{ install_development_packages }}" }
-    - { packages: "{{ monitoring_packages }}", enabled: "{{ install_monitoring_packages }}" }
-    - { packages: "{{ network_packages }}", enabled: "{{ install_network_packages }}" }
-    - { packages: "{{ archive_packages }}", enabled: "{{ install_archive_packages }}" }
-    - { packages: "{{ sync_packages }}", enabled: "{{ install_sync_packages }}" }
+    - { packages: "{{ admin_packages_essential }}", enabled: "{{ admin_packages_install_essential }}" }
+    - { packages: "{{ admin_packages_development }}", enabled: "{{ admin_packages_install_development }}" }
+    - { packages: "{{ admin_packages_monitoring }}", enabled: "{{ admin_packages_install_monitoring }}" }
+    - { packages: "{{ admin_packages_network }}", enabled: "{{ admin_packages_install_network }}" }
+    - { packages: "{{ admin_packages_archive }}", enabled: "{{ admin_packages_install_archive }}" }
+    - { packages: "{{ admin_packages_sync }}", enabled: "{{ admin_packages_install_sync }}" }
   when:
     - ansible_os_family == "Debian"
     - item.enabled | bool
 
 - name: Install package families (RedHat/CentOS)
-  yum:
+  ansible.builtin.dnf:
     name: "{{ item.packages }}"
     state: present
   loop:
-    - { packages: "{{ essential_packages }}", enabled: "{{ install_essential_packages }}" }
-    - { packages: "{{ development_packages }}", enabled: "{{ install_development_packages }}" }
-    - { packages: "{{ monitoring_packages }}", enabled: "{{ install_monitoring_packages }}" }
-    - { packages: "{{ network_packages }}", enabled: "{{ install_network_packages }}" }
-    - { packages: "{{ archive_packages }}", enabled: "{{ install_archive_packages }}" }
-    - { packages: "{{ sync_packages }}", enabled: "{{ install_sync_packages }}" }
+    - { packages: "{{ admin_packages_essential }}", enabled: "{{ admin_packages_install_essential }}" }
+    - { packages: "{{ admin_packages_development }}", enabled: "{{ admin_packages_install_development }}" }
+    - { packages: "{{ admin_packages_monitoring }}", enabled: "{{ admin_packages_install_monitoring }}" }
+    - { packages: "{{ admin_packages_network }}", enabled: "{{ admin_packages_install_network }}" }
+    - { packages: "{{ admin_packages_archive }}", enabled: "{{ admin_packages_install_archive }}" }
+    - { packages: "{{ admin_packages_sync }}", enabled: "{{ admin_packages_install_sync }}" }
   when:
     - ansible_os_family == "RedHat"
     - item.enabled | bool

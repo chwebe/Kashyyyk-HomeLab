@@ -1,39 +1,39 @@
 ---
-install_essential_packages: true
-install_development_packages: true
-install_monitoring_packages: true
-install_network_packages: false
-install_archive_packages: false
-install_sync_packages: false
+admin_packages_install_essential: true
+admin_packages_install_development: true
+admin_packages_install_monitoring: true
+admin_packages_install_network: false
+admin_packages_install_archive: false
+admin_packages_install_sync: false
 
-essential_packages:
+admin_packages_essential:
   - vim
   - zsh
   - tmux
   - git
 
-development_packages:
+admin_packages_development:
   - curl
   - wget
   - tree
 
-monitoring_packages:
+admin_packages_monitoring:
   - htop
   - ncdu
   - lsof
   - strace
 
-network_packages:
+admin_packages_network:
   - net-tools
   - nmap
   - tcpdump
 
-archive_packages:
+admin_packages_archive:
   - unzip
   - zip
   - tar
   - gzip
 
-sync_packages:
+admin_packages_sync:
   - rsync
   - rclone
