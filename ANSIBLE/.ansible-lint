@@ -1,0 +1,34 @@
+---
+# Ansible-lint configuration file
+#
+# Task Naming Convention for Roles:
+# All task and handler names in roles MUST follow the pattern:
+#   "ROLE_NAME | Description"
+# 
+# Examples:
+#   - "DNS STACK | Restart"
+#   - "DNS STACK | Deploy configuration"
+#   - "ADMIN PACKAGES | Install essential tools"
+#
+# The pipe separator (|) helps distinguish role-based tasks from playbook tasks.
+# ROLE_NAME should be uppercase, Description should start with uppercase.
+
+# Exclude paths
+exclude_paths:
+  - .cache/
+  - .git/
+  - venv/
+
+# Enable checking of loop variable prefixes in roles
+loop_var_prefix: "{role}_"
+
+# Warn instead of error for certain rules
+warn_list:
+  - experimental
+
+# Skip specific rules (if needed)
+skip_list: []
+
+# Custom rules directory
+rulesdir:
+  - .ansible-lint-rules/
