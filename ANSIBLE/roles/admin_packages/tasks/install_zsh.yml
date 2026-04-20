@@ -1,0 +1,85 @@
+---
+- name: ADMIN PACKAGES | Install zsh package (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+  when: ansible_facts['os_family'] == "Debian"
+  become: true
+
+- name: ADMIN PACKAGES | Install zsh package (RedHat/CentOS)
+  ansible.builtin.dnf:
+    name: zsh
+    state: present
+  when: ansible_facts['os_family'] == "RedHat"
+  become: true
+
+- name: ADMIN PACKAGES | Verify zsh is installed
+  ansible.builtin.command: which zsh
+  register: zsh_check
+  changed_when: false
+  failed_when: false
+
+- name: ADMIN PACKAGES | Set zsh as default shell
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    shell: /usr/bin/zsh
+  when: zsh_check.rc == 0
+  become: true
+
+- name: ADMIN PACKAGES | Check if Oh My Zsh is already installed
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh"
+  register: ohmyzsh_stat
+  when: zsh_check.rc == 0
+
+- block:
+  - name: ADMIN PACKAGES | Download Oh My Zsh installer
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+      dest: "{{ ansible_facts['env']['HOME'] }}/install_ohmyzsh.sh"
+      mode: '0755'
+
+  - name: ADMIN PACKAGES | Install Oh My Zsh
+    ansible.builtin.shell:
+      cmd: "{{ ansible_facts['env']['HOME'] }}/install_ohmyzsh.sh --unattended"
+      creates: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh"
+      register: ohmyzsh_result
+      failed_when: "'FAILED' in ohmyzsh_result.stderr"
+
+
+  - name: ADMIN PACKAGES | Remove Oh My Zsh installer
+    ansible.builtin.file:
+      path: "{{ ansible_facts['env']['HOME'] }}/install_ohmyzsh.sh"
+      state: absent
+
+  when:
+    - zsh_check.rc == 0
+    - not ohmyzsh_stat.stat.exists
+
+- name: ADMIN PACKAGES | Install zsh-autosuggestions plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: "~{{ ansible_user }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    depth: 1
+  when: zsh_check.rc == 0
+  become: true
+  become_user: "{{ ansible_user }}"
+
+- name: ADMIN PACKAGES | Install zsh-syntax-highlighting plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "~{{ ansible_user }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    depth: 1
+  when: zsh_check.rc == 0
+  become: true
+  become_user: "{{ ansible_user }}"
+
+- name: ADMIN PACKAGES | Configure Oh My Zsh plugins in .zshrc
+  ansible.builtin.lineinfile:
+    path: "~{{ ansible_user }}/.zshrc"
+    regexp: '^plugins=\('
+    line: "plugins=({{ admin_packages_zsh_plugins | join(' ') }})"
+    state: present
+  when: zsh_check.rc == 0
+  become: true
+  become_user: "{{ ansible_user }}"

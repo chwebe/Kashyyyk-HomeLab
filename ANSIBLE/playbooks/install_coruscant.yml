@@ -1,5 +1,4 @@
 - name: prepare corusant Systems
-  hosts: localhost
-  become: true
+  hosts: ansible_node
   roles:
     - admin_packages

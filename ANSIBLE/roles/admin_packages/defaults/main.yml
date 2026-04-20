@@ -1,4 +1,27 @@
 ---
+admin_packages_install_zsh: true
+admin_packages_configure_ssh_keys: true
+
+admin_packages_ssh_keys:
+  - ~/.ssh/id_ed25519_gh_hll
+  - ~/.ssh/ansible_ed25519.pub
+
+admin_packages_zsh_plugins:
+  - aliases
+  - ansible
+  - command-not-found
+  - docker
+  - docker-compose
+  - git
+  - git-auto-fetch
+  - git-commit
+  - python
+  - sudo
+  - tmux
+  - uv
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
+
 admin_packages_install_essential: true
 admin_packages_install_development: true
 admin_packages_install_monitoring: true
@@ -8,9 +31,9 @@ admin_packages_install_sync: false
 
 admin_packages_essential:
   - vim
-  - zsh
   - tmux
   - git
+  - openssh-client
 
 admin_packages_development:
   - curl

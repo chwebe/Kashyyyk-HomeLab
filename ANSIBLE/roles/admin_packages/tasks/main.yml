@@ -1,9 +1,17 @@
 ---
-- name: Update system packages
+- name: ADMIN PACKAGES | Update system packages
   ansible.builtin.include_role:
     name: system_update
 
-- name: Install package families (Debian/Ubuntu)
+- name: ADMIN PACKAGES | Install zsh
+  ansible.builtin.include_tasks: install_zsh.yml
+  when: admin_packages_install_zsh | bool
+
+- name: ADMIN PACKAGES | Configure SSH keys auto-loading
+  ansible.builtin.include_tasks: configure_ssh_keys.yml
+  when: admin_packages_configure_ssh_keys | bool
+
+- name: ADMIN PACKAGES | Install package families (Debian/Ubuntu)
   ansible.builtin.apt:
     name: "{{ item.packages }}"
     state: present
@@ -17,8 +25,9 @@
   when:
     - ansible_os_family == "Debian"
     - item.enabled | bool
+  become: true
 
-- name: Install package families (RedHat/CentOS)
+- name: ADMIN PACKAGES | Install package families (RedHat/CentOS)
   ansible.builtin.dnf:
     name: "{{ item.packages }}"
     state: present
@@ -32,3 +41,4 @@
   when:
     - ansible_os_family == "RedHat"
     - item.enabled | bool
+  become: true
