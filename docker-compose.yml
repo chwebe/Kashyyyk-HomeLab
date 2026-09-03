@@ -5,8 +5,8 @@ services:
         image: ansible:v1.0
         volumes:
             - ./ANSIBLE:/etc/ansible
-            - ./keys:/root/.ssh
+            - ~/.ssh:/home/ansible/.ssh
         working_dir: /etc/ansible
+        user: "1000:1000"
         entrypoint: ["/bin/sh", "-c", "while true; do sleep 1; done"]
-        command: ["tail", "-f", "/dev/null"]
         #network_mode: host
