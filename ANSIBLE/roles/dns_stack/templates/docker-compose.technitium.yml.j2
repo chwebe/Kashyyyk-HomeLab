@@ -8,8 +8,13 @@ services:
 {% else %}
     ports:
       - "{{ dns_stack_technitium_web_port }}:{{ dns_stack_technitium_web_container_port }}/tcp"
+{% if dns_stack_technitium_dns_bind_address | default('') | length > 0 %}
+      - "{{ dns_stack_technitium_dns_bind_address }}:{{ dns_stack_technitium_dns_port }}:53/udp"
+      - "{{ dns_stack_technitium_dns_bind_address }}:{{ dns_stack_technitium_dns_port }}:53/tcp"
+{% else %}
       - "{{ dns_stack_technitium_dns_port }}:53/udp"
       - "{{ dns_stack_technitium_dns_port }}:53/tcp"
+{% endif %}
 {% endif %}
     environment:
 {% for key, value in dns_stack_technitium_environment.items() %}

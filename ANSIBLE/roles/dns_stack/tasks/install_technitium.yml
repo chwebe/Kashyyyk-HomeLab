@@ -7,29 +7,29 @@
     state: directory
     mode: '0755'
 
-# - name: Deploy Technitium docker-compose.yml
-#   ansible.builtin.template:
-#     src: docker-compose.technitium.yml.j2
-#     dest: "{{ dns_stack_technitium_deploy_dir }}/docker-compose.yml"
-#     mode: '0644'
-#   notify: Restart dns stack technitium
+- name: Deploy Technitium docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.technitium.yml.j2
+    dest: "{{ dns_stack_technitium_deploy_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart dns stack technitium
 
-# - name: Start Technitium DNS stack
-#   community.docker.docker_compose_v2:
-#     project_src: "{{ dns_stack_technitium_deploy_dir }}"
-#     state: present
-#   register: dns_stack_technitium_compose_result
+- name: Start Technitium DNS stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ dns_stack_technitium_deploy_dir }}"
+    state: present
+  register: dns_stack_technitium_compose_result
 
-# - name: Wait for Technitium web console (HTTP)
-#   ansible.builtin.uri:
-#     url: "http://127.0.0.1:{{ dns_stack_technitium_web_port }}/"
-#     status_code: 200
-#   register: dns_stack_technitium_web_check
-#   until: dns_stack_technitium_web_check.status == 200
-#   retries: "{{ dns_stack_technitium_web_ready_retries }}"
-#   delay: "{{ dns_stack_technitium_web_ready_delay }}"
-#   when: dns_stack_technitium_wait_for_web
-#   ignore_errors: true
+- name: Wait for Technitium web console (HTTP)
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ dns_stack_technitium_web_port }}/"
+    status_code: 200
+  register: dns_stack_technitium_web_check
+  until: dns_stack_technitium_web_check.status == 200
+  retries: "{{ dns_stack_technitium_web_ready_retries }}"
+  delay: "{{ dns_stack_technitium_web_ready_delay }}"
+  when: dns_stack_technitium_wait_for_web
+  ignore_errors: true
 
 - name: Wait for Technitium API to be ready
   ansible.builtin.uri:

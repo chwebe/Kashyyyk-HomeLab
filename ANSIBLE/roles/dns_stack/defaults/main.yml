@@ -45,6 +45,10 @@ dns_stack_technitium_network_mode: ""
 dns_stack_technitium_web_port: 5380
 dns_stack_technitium_web_container_port: 5380
 dns_stack_technitium_dns_port: 53
+# Bind the DNS port to a specific host IP instead of all interfaces (0.0.0.0).
+# Leave empty for 0.0.0.0. Useful to avoid clashing with systemd-resolved's
+# 127.0.0.53:53 stub, and to keep DNS off public interfaces.
+dns_stack_technitium_dns_bind_address: ""
 dns_stack_technitium_domain: dns-server
 dns_stack_technitium_environment:
   DNS_SERVER_DOMAIN: "{{ dns_stack_technitium_domain }}"

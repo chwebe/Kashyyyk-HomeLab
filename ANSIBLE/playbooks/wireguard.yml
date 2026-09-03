@@ -5,8 +5,12 @@
   gather_facts: true
   vars:
     wireguard_host: "{{ ansible_host }}"
+    wireguard_default_dns: "{{ ansible_default_ipv4.address }}"
+    dns_stack_install_technitium: true
+    dns_stack_technitium_dns_bind_address: "{{ ansible_default_ipv4.address }}"
   roles:
     - system_update
     - docker
+    - dns_stack
     - wireguard
 
