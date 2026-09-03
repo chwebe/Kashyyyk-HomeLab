@@ -1,0 +1,7 @@
+---
+# WireGuard role - Internal variables
+
+# Ports to check before deployment (tag: check_ports)
+wireguard_ports_to_check:
+  - "{{ wireguard_port }}"
+  - "{{ wireguard_web_port }}"

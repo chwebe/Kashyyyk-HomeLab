@@ -1,0 +1,7 @@
+---
+# WireGuard role - Handlers
+
+- name: Restart wireguard
+  community.docker.docker_compose_v2:
+    project_src: "{{ wireguard_deploy_dir }}"
+    state: restarted

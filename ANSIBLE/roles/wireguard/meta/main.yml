@@ -1,0 +1,27 @@
+---
+# WireGuard role - Metadata
+galaxy_info:
+  author: Ansible user
+  description: Deploy WireGuard VPN with Docker Compose (wg-easy)
+  company: none
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+  galaxy_tags:
+    - wireguard
+    - vpn
+    - docker
+
+dependencies:
+  - role: port_check
+    vars:
+      ports_to_check: "{{ wireguard_ports_to_check }}"
+    tags: ['never', 'check_ports']

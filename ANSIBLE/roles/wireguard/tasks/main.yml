@@ -1,0 +1,37 @@
+---
+# WireGuard role - Main tasks for wg-easy deployment
+
+- name: Assert required WireGuard variables are set
+  ansible.builtin.assert:
+    that:
+      - wireguard_host | length > 0
+    fail_msg: >-
+      wireguard_host must be set (e.g. in the playbook or host_vars).
+    quiet: true
+
+- name: Create WireGuard deployment directory
+  ansible.builtin.file:
+    path: "{{ wireguard_deploy_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ wireguard_deploy_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart wireguard
+
+- name: Start WireGuard (wg-easy)
+  community.docker.docker_compose_v2:
+    project_src: "{{ wireguard_deploy_dir }}"
+    state: present
+  register: wireguard_result
+
+- name: Display WireGuard access information
+  ansible.builtin.debug:
+    msg:
+      - "WireGuard (wg-easy) is running"
+      - "Web UI: http://{{ wireguard_host }}:{{ wireguard_web_port }}"
+      - "VPN endpoint: {{ wireguard_host }}:{{ wireguard_port }}/udp"
+      - "{{ 'Password: ' + wireguard_password if wireguard_password_hash | length > 0 else 'WARNING: no password set, web UI has no authentication!' }}"
