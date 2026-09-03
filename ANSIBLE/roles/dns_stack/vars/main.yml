@@ -1,8 +1,10 @@
 ---
 # DNS Stack role - Internal variables
 
-# Ports to check before deployment
+# Ports to check before deployment (tag: check_ports)
 dns_stack_ports_to_check:
-  - "{{ pihole_dns_port }}"
-  - "{{ pihole_web_port }}"
-  - "{{ unbound_dns_port }}"
+  - "{{ dns_stack_pihole_dns_port }}"
+  - "{{ dns_stack_pihole_web_port }}"
+  - "{{ dns_stack_unbound_dns_port }}"
+  - "{{ dns_stack_technitium_dns_port }}"
+  - "{{ dns_stack_technitium_web_port }}"

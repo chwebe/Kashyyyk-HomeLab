@@ -2,7 +2,7 @@
 # DNS Stack role - Metadata
 galaxy_info:
   author: Ansible user
-  description: Deploy Pi-hole and Unbound DNS stack with Docker Compose
+  description: Deploy DNS with Docker Compose (Pi-hole + Unbound and/or Technitium DNS Server)
   company: none
   license: MIT
   min_ansible_version: "2.9"

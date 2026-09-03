@@ -1,0 +1,32 @@
+services:
+  {{ dns_stack_technitium_service_name }}:
+    container_name: {{ dns_stack_technitium_container_name }}
+    hostname: {{ dns_stack_technitium_hostname }}
+    image: {{ dns_stack_technitium_image }}
+{% if dns_stack_technitium_network_mode | length > 0 %}
+    network_mode: "{{ dns_stack_technitium_network_mode }}"
+{% else %}
+    ports:
+      - "{{ dns_stack_technitium_web_port }}:{{ dns_stack_technitium_web_container_port }}/tcp"
+      - "{{ dns_stack_technitium_dns_port }}:53/udp"
+      - "{{ dns_stack_technitium_dns_port }}:53/tcp"
+{% endif %}
+    environment:
+{% for key, value in dns_stack_technitium_environment.items() %}
+      {{ key }}: {{ value | to_json }}
+{% endfor %}
+{% if dns_stack_technitium_admin_password | default('') | length > 0 %}
+      DNS_SERVER_ADMIN_PASSWORD: {{ dns_stack_technitium_admin_password | to_json }}
+{% endif %}
+    volumes:
+      - {{ dns_stack_technitium_volume_config }}:/etc/dns
+      - {{ dns_stack_technitium_volume_logs }}:/var/log/technitium/dns
+    restart: {{ dns_stack_technitium_restart_policy }}
+{% if dns_stack_technitium_network_mode | length == 0 %}
+    sysctls:
+      - net.ipv4.ip_local_port_range=1024 65535
+{% endif %}
+
+volumes:
+  {{ dns_stack_technitium_volume_config }}:
+  {{ dns_stack_technitium_volume_logs }}:

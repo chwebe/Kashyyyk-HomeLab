@@ -1,5 +1,11 @@
 ---
-# DNS Stack role - Default variables for Pi-hole + Unbound
+# DNS Stack role — Pi-hole + Unbound and/or Technitium (Docker)
+
+# Install Pi-hole and Unbound
+dns_stack_install_pihole_unbound: false
+
+# Install Technitium DNS Server (separate compose project; defaults live under dns_stack_deploy_dir/technitium)
+dns_stack_install_technitium: false
 
 # Deployment directory
 dns_stack_deploy_dir: /opt/dns-stack
@@ -28,3 +34,34 @@ dns_stack_unbound_dns_port: 5300
 dns_stack_unbound_container_name: unbound
 dns_stack_unbound_image: klutchell/unbound:latest
 dns_stack_unbound_restart_policy: unless-stopped
+
+# Technitium DNS Server (https://github.com/TechnitiumSoftware/DnsServer/blob/master/docker-compose.yml)
+dns_stack_technitium_deploy_dir: "{{ dns_stack_deploy_dir }}/technitium"
+dns_stack_technitium_service_name: dns-server
+dns_stack_technitium_container_name: dns-server
+dns_stack_technitium_hostname: dns-server
+dns_stack_technitium_image: docker.io/technitium/dns-server:latest
+dns_stack_technitium_network_mode: ""
+dns_stack_technitium_web_port: 5380
+dns_stack_technitium_web_container_port: 5380
+dns_stack_technitium_dns_port: 53
+dns_stack_technitium_domain: dns-server
+dns_stack_technitium_environment:
+  DNS_SERVER_DOMAIN: "{{ dns_stack_technitium_domain }}"
+  DNS_SERVER_LOG_FOLDER_PATH: /var/log/technitium/dns
+dns_stack_technitium_volume_config: technitium_dns_config
+dns_stack_technitium_volume_logs: technitium_dns_logs
+dns_stack_technitium_restart_policy: unless-stopped
+dns_stack_technitium_wait_for_web: true
+dns_stack_technitium_web_ready_retries: 30
+dns_stack_technitium_web_ready_delay: 2
+dns_stack_technitium_admin_username: admin
+dns_stack_technitium_admin_password: "Qm/A4?\\A2-Ybm-mj1)hx"
+
+# Block list feed URLs (newline-separated for Technitium blockListUrls setting)
+dns_stack_technitium_block_list_urls:
+  - "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/pro-onlydomains.txt"
+  - "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+# Allow-list URLs: prefixed with "!" when sent to Technitium (same setting field)
+dns_stack_technitium_allow_list_urls: []
+
