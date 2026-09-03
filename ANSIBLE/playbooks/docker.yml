@@ -1,0 +1,7 @@
+- name: prepare raspi Systems
+  hosts: S089800DCK001
+  become: true
+  roles:
+    - system_update
+    - docker
+    - port_check

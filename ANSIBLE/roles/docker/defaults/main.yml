@@ -3,7 +3,7 @@
 
 # Docker package to install
 docker_package: docker.io
-docker_compose_package: docker-compose
+docker_compose_package: docker-compose-v2
 
 # Enable Docker service
 docker_enable_service: true
