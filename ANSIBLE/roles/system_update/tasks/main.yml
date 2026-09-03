@@ -21,3 +21,25 @@
       name: '*'
       state: latest
   when: ansible_facts['os_family'] == 'RedHat'
+
+- name: SYSTEM UPDATE | Check if a reboot is required (Debian)
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: system_update_reboot_required_file
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: SYSTEM UPDATE | Check if a reboot is required (RedHat)
+  ansible.builtin.command: needs-restarting -r
+  register: system_update_needs_restarting
+  changed_when: false
+  failed_when: false
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: SYSTEM UPDATE | Reboot if required
+  become: true
+  ansible.builtin.reboot:
+    msg: "Rebooting after system update"
+    reboot_timeout: 600
+  when: >
+    (ansible_facts['os_family'] == "Debian" and system_update_reboot_required_file.stat.exists) or
+    (ansible_facts['os_family'] == "RedHat" and system_update_needs_restarting.rc == 1)
