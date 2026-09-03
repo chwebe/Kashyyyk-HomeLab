@@ -54,7 +54,34 @@
       {% endfor %}
     state: present
     create: true
+    mode: '0644'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: true
+
+- name: ADMIN PACKAGES | Set correct permissions on SSH config file
+  ansible.builtin.file:
+    path: "~{{ ansible_user }}/.ssh/config"
+    mode: '0644'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: true
+  failed_when: false
+
+- name: ADMIN PACKAGES | Set correct permissions on known_hosts
+  ansible.builtin.file:
+    path: "~{{ ansible_user }}/.ssh/known_hosts"
+    mode: '0644'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: true
+  failed_when: false
+
+- name: ADMIN PACKAGES | Set correct permissions on authorized_keys
+  ansible.builtin.file:
+    path: "~{{ ansible_user }}/.ssh/authorized_keys"
     mode: '0600'
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
   become: true
+  failed_when: false

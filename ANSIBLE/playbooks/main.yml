@@ -1,12 +1,17 @@
 - name: Prepare Systems
   hosts: oci
   become: true
+  roles:    
+    - system_update
+
+- name: prepare raspi Systems
+  hosts: S089800DCK001
+  become: true
   roles:
     - system_update
 
-
-- name: prepare raspi Systems
-  hosts: raspi
+- name: update corrusant Systems
+  hosts: localhost
   become: true
   roles:
     - system_update

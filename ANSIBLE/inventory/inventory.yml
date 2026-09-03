@@ -2,13 +2,15 @@ raspi:
   hosts:
     coruscant01:
       ansible_host: 192.168.1.47
-    coruscant02:
+    S089800DCK001:
       ansible_host: 192.168.1.13
+      ansible_user: chweadm
+     
 
 oci:
   hosts:
     wireguard:
-      ansible_host: 84.235.161.154
+      ansible_host: 141.148.245.57
       ansible_user: ubuntu
 
 prod:
@@ -21,5 +23,4 @@ local:
       ansible_host: 192.168.1.47
       ansible_port: 2222
       ansible_user: chweadm
-      ansible_ssh_private_key_file: /root/.ssh/id_ed25519_ansible
-      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+

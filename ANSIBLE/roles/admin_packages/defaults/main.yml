@@ -4,7 +4,7 @@ admin_packages_configure_ssh_keys: true
 
 admin_packages_ssh_keys:
   - ~/.ssh/id_ed25519_gh_hll
-  - ~/.ssh/ansible_ed25519.pub
+  - ~/.ssh/ansible_ed25519
 
 admin_packages_zsh_plugins:
   - aliases
